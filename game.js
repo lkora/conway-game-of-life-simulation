@@ -1,9 +1,12 @@
 var w_window = window.innerWidth;
 var h_window = window.innerHeight;
 var resolution = w_window < h_window ? w_window : h_window;
-var proportion = 100;
+var proportion = 50; // Size of one square
+var canvas_dim = Math.floor(resolution/proportion) * proportion; // canvas size, relative to the window resolution
+var matrix;
 var rows;
 var cols;
+const SPEED = 50
 
 
 // Returns an integer n, such that: 0 <= n < max
@@ -32,6 +35,7 @@ function fill_random(matrix) {
     return matrix;
 }
 
+
 function prepareCanvas(width, height){
     let canvas = document.createElement("canvas");
     canvas.width = width;
@@ -40,11 +44,10 @@ function prepareCanvas(width, height){
     let ctx = canvas.getContext("2d");
     return canvas, ctx;
 }
+var canvas, ctx;
+
 
 function draw(ctx, matrix) {
-    // Calculate the canvas size, relative to the window resolution
-    canvas_dim = Math.floor(resolution/proportion) * proportion;
-
     // Fill the whole canvas black
     ctx.fillStyle = "#000000";
     ctx.fillRect(0, 0, canvas_dim, canvas_dim);
@@ -60,23 +63,79 @@ function draw(ctx, matrix) {
             if(matrix[i][j] == 1){
                 ctx.fillStyle = "#FFFFFF";
                 ctx.stroke();
-                ctx.fillRect(x, y, a-1, a-1);
+                ctx.fillRect(x+1, y+1, a-2, a-2);
             }
         }
+    } 
+}
+
+// Counts alive neighbouring cells to the (x, y) cell
+function countNeigbours(matrix, x, y) {
+    let sum = 0;
+    // for(let i = -1; i < 2 && x+i < rows && x+i > -1; i++){
+    //     for(let j = -1; j < 2 && y+j < cols && y+j > -1; j++){
+    //         sum += matrix[x+i][y+j];
+    //     }
+    // }
+
+    // Wrap around
+    for(let i = -1; i < 2; i++){
+        for(let j = -1; j < 2; j++){
+            let row = (x + i + rows) % rows;
+            let col = (y + j + cols) % cols;
+            sum += matrix[row][col];
+        }
     }
+    sum -= matrix[x][y];
+    return sum;
+}
+
+function updateMatrix(matrix) {
+    let next = make2DArray(rows, cols);
+
+    // Caluclate next based on current matrix
+    for(let i = 0; i < rows; i++){
+        for(let j = 0; j < cols; j++){
+
+            // Count live neighbours
+            let neighbours = countNeigbours(matrix, i, j);
+
+            let state = matrix[i][j];
+            // Rule 1:
+            if(state == 0 && neighbours == 3)
+                next[i][j] = 1;
+            // Rule 2:
+                else if (state == 1 && (neighbours < 2 || neighbours > 3))
+                next[i][j] = 0;
+            // Rule 3:
+            else
+                next[i][j] = state;
+
+        }
+    }
+    return next;
+}
+
+function updateGame() {
+    draw(ctx, matrix);
+    matrix = updateMatrix(matrix);
 }
 
 
-
 function main() {
-    let canvas, ctx = prepareCanvas(resolution, resolution);
+    canvas, ctx = prepareCanvas(resolution, resolution);
     // Setup number of rows and cols according to window resolution
     rows = Math.floor(resolution / proportion);
     cols = Math.floor(resolution / proportion);
     console.log("Resolution: " + resolution + "\n", "rows: " + rows + "\n", "cols: " + cols + "\n");
-    let matrix = make2DArray(rows, cols);
+    
+    // Initialze the begining state
+    matrix = make2DArray(rows, cols);
     matrix = fill_random(matrix);
-    draw(ctx, matrix);
+    
+    // Start the main loop
+    setInterval(updateGame, SPEED);
+
 }
 
 document.addEventListener('DOMContentLoaded', main)
