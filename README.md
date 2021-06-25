@@ -14,3 +14,9 @@ These rules, which compare the behavior of the automaton to real life, can be co
 1. Any live cell with two or three live neighbours survives.
 2. Any dead cell with three live neighbours becomes a live cell.
 3. All other live cells die in the next generation. Similarly, all other dead cells stay dead.
+
+
+### TODO
+[*] Make a base game (wrapping)
+[ ] Make each cell a ceperate object
+[ ] Possibly wrap it around in a torus
