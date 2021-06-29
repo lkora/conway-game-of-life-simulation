@@ -72,6 +72,7 @@ function draw(ctx, matrix) {
 // Counts alive neighbouring cells to the (x, y) cell
 function countNeigbours(matrix, x, y) {
     let sum = 0;
+    // Bound to edges
     // for(let i = -1; i < 2 && x+i < rows && x+i > -1; i++){
     //     for(let j = -1; j < 2 && y+j < cols && y+j > -1; j++){
     //         sum += matrix[x+i][y+j];
