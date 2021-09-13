@@ -6,7 +6,7 @@ var canvas_dim = Math.floor(resolution/proportion) * proportion; // canvas size,
 var matrix;
 var rows;
 var cols;
-const SPEED = 50
+const SPEED = 100;
 
 
 // Returns an integer n, such that: 0 <= n < max
@@ -38,6 +38,7 @@ function fill_random(matrix) {
 
 function prepareCanvas(width, height){
     let canvas = document.createElement("canvas");
+    canvas.id = "canv";
     canvas.width = width;
     canvas.height = height;
     document.body.appendChild(canvas);
@@ -91,6 +92,8 @@ function countNeigbours(matrix, x, y) {
     return sum;
 }
 
+
+// TODO: Fix the O(n^4)
 function updateMatrix(matrix) {
     let next = make2DArray(rows, cols);
 
@@ -111,15 +114,18 @@ function updateMatrix(matrix) {
             // Rule 3:
             else
                 next[i][j] = state;
-
         }
     }
     return next;
 }
 
 function updateGame() {
+    // Draw current canvas, and update it 
     draw(ctx, matrix);
     matrix = updateMatrix(matrix);
+
+    // Update the texture on the torus
+    updateMaterialFromCanvas(document.getElementById("canv"));
 }
 
 
@@ -129,12 +135,16 @@ function main() {
     rows = Math.floor(resolution / proportion);
     cols = Math.floor(resolution / proportion);
     console.log("Resolution: " + resolution + "\n", "rows: " + rows + "\n", "cols: " + cols + "\n");
+
+    // Draw cooresponding torus
+    drawTorus(rows, cols);
     
     // Initialze the begining state
     matrix = make2DArray(rows, cols);
     matrix = fill_random(matrix);
     
     // Start the main loop
+    // updateGame();
     setInterval(updateGame, SPEED);
 
 }
