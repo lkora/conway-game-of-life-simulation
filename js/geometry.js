@@ -5,7 +5,7 @@ function updateMaterialFromCanvas(HTMLCanvas) {
     var material = new THREE.MeshStandardMaterial({
         map: canvTexture,
         displacementMap: canvTexture,
-        displacementScale: 1,
+        displacementScale: 0.8,
 
     })
     torus.material = material;
@@ -13,7 +13,7 @@ function updateMaterialFromCanvas(HTMLCanvas) {
 };
 
 function getRandomStarField(numberOfStars, width, height) {
-    var canvas = document.createElement('CANVAS');
+    var canvas = document.createElement("canvas");
 
 	canvas.width = width;
 	canvas.height = height;

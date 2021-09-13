@@ -65,7 +65,7 @@ function draw(ctx, matrix) {
             if(matrix[i][j] == 1){
                 ctx.fillStyle = "#FFFFFF";
                 ctx.stroke();
-                ctx.fillRect(x+1, y+1, a-2, a-2);
+                ctx.fillRect(x+6, y+6, a-7, a-7);
             }
         }
     } 
