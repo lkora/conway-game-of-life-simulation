@@ -41,6 +41,7 @@ function prepareCanvas(width, height){
     canvas.id = "canv";
     canvas.width = width;
     canvas.height = height;
+    canvas.style.display = "none";
     document.body.appendChild(canvas);
     let ctx = canvas.getContext("2d");
     return canvas, ctx;
