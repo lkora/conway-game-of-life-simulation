@@ -10,7 +10,34 @@ function updateMaterialFromCanvas(HTMLCanvas) {
     })
     torus.material = material;
     torus.material.needsUpdate = true;
-}
+};
+
+function getRandomStarField(numberOfStars, width, height) {
+    var canvas = document.createElement('CANVAS');
+
+	canvas.width = width;
+	canvas.height = height;
+
+	var ctx = canvas.getContext('2d');
+
+	ctx.fillStyle="black";
+	ctx.fillRect(0, 0, width, height);
+
+	for (var i = 0; i < numberOfStars; ++i) {
+		var radius = Math.random() * 2;
+		var x = Math.floor(Math.random() * width);
+		var y = Math.floor(Math.random() * height);
+
+		ctx.beginPath();
+		ctx.arc(x, y, radius, 0, 2 * Math.PI, false);
+		ctx.fillStyle = 'white';
+		ctx.fill();
+	}
+
+	var texture = new THREE.Texture(canvas);
+	texture.needsUpdate = true;
+	return texture;
+};
 
 function drawTorus(rows, cols) {
     // Setting the scene and the camera
@@ -19,6 +46,19 @@ function drawTorus(rows, cols) {
 
     // Lights
     const light = new THREE.AmbientLight( 0xFFFFFF );
+    const pointl1 = new THREE.PointLight( 0xABD1F3, 30, 100 );
+    pointl1.position.set( 60, 40, 20 );
+    const pointl2 = new THREE.PointLight( 0xC72F31, 30, 100 );
+    pointl2.position.set( -60, -30, 20 );
+
+
+    // Create skybox
+    var skyBox = new THREE.BoxGeometry(120, 120, 120);
+    var skyBoxMaterial = new THREE.MeshBasicMaterial({
+        map: getRandomStarField(600, 2048, 2048),
+        side: THREE.BackSide
+    });
+    var sky = new THREE.Mesh(skyBox, skyBoxMaterial);
 
     // Setting the renderer
     const renderer = new THREE.WebGLRenderer();
@@ -37,7 +77,7 @@ function drawTorus(rows, cols) {
         polygonOffsetUnits: 1,
     });
     
-    const geometry_poly = new THREE.TorusGeometry( 10, 5, 60, 150 );
+    const geometry_poly = new THREE.TorusGeometry( 10, 5, 150, 300 );
 
     // const geometry_poly = new THREE.TorusGeometry( 10, 5, 5, 6 );
     torus = new THREE.Mesh( geometry_poly, material );
@@ -50,9 +90,12 @@ function drawTorus(rows, cols) {
     // Grouping and showing
     const group = new THREE.Group();
     group.add(torus);
+    group.add(sky);
     // group.add(wireframe);
     scene.add(group);
     scene.add(light);
+    scene.add(pointl1);
+    scene.add(pointl2);
 
 
     camera.position.z = 30;
@@ -66,4 +109,4 @@ function drawTorus(rows, cols) {
     };
     animate();
     
-}
+};
