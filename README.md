@@ -21,5 +21,5 @@ These rules, which compare the behavior of the automaton to real life, can be co
 ### TODO
 - [x] Make a base game (wrapping)
 - [ ] Make each cell a ceperate object
-- [ ] Possibly wrap it around in a torus
+- [x] Possibly wrap it around in a torus
 - [ ] Multithreading
