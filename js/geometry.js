@@ -39,7 +39,7 @@ function getRandomStarField(numberOfStars, width, height) {
 	return texture;
 };
 
-function drawTorus(rows, cols) {
+function drawTorus() {
     // Setting the scene and the camera
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera( 90, window.innerWidth / window.innerHeight, 0.1, 1000 );
@@ -86,6 +86,9 @@ function drawTorus(rows, cols) {
     // var material_wire = new THREE.LineBasicMaterial( { color: white } );
     // var wireframe = new THREE.LineSegments( geometry_wire , material_wire );
 
+
+    // Adding camera movements with mouse
+    
 
     // Grouping and showing
     const group = new THREE.Group();

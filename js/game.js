@@ -138,7 +138,7 @@ function main() {
     console.log("Resolution: " + resolution + "\n", "rows: " + rows + "\n", "cols: " + cols + "\n");
 
     // Draw cooresponding torus
-    drawTorus(rows, cols);
+    drawTorus();
     
     // Initialze the begining state
     matrix = make2DArray(rows, cols);
